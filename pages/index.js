@@ -1,25 +1,41 @@
 import styles from '../styles/Home.module.css'
-import { getHeroItem } from "../lib/kontentClient";
+import { gql } from '@apollo/client';
+import client from "../lib/apollo-client";
 
-export default function Home({ heroItem }) {
+export default function Home({ data }) {
+  const { blogPost_All: { items } } = data;
   return (
     <main >
       <div className={styles.hero}>
-        <h1 className="append-dot">{heroItem.headline}</h1>
-        <div className={styles.summary} dangerouslySetInnerHTML={{ __html: heroItem.summary }}>
-        </div>
-        <div className="button">
-          <a href={heroItem.cta_url}>{heroItem.cta_label}</a>
-        </div>
+        <h1 className="append-dot">Hello, world</h1>
       </div>
+      <ul className="blog-post-list">
+        {Array.isArray(items) ? items.map((item, index) => {
+          return (
+            <li key={item.title + index}>{item.title}</li>
+          )
+        }) : (<h3>No posts avaliable</h3>)}
+      </ul>
     </main>
   )
 }
 
+
 export async function getStaticProps() {
-  const heroItem = await getHeroItem();
+  const { data } = await client.query({
+    query: gql`
+      query BlogPosts {
+        blogPost_All {
+          items {
+            slug
+            title
+          }
+        }
+      }
+    `
+  })
 
   return {
-    props: { heroItem },
+    props: { data },
   };
 }
