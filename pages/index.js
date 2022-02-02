@@ -1,28 +1,36 @@
-import styles from '../styles/Home.module.css'
 import { gql } from '@apollo/client';
 import client from "../lib/apollo-client";
 
-export default function Home({ data }) {
-  const { blogPost_All: { items } } = data;
+export default function Home({ blogPage, blogPosts }) {
   return (
-    <main >
-      <div className={styles.hero}>
-        <h1 className="append-dot">Hello, world</h1>
+    <div>
+      <div className="container hero">
+        <h1 className="title">{blogPage._pageHero?.title}</h1>
+        <p className="description">{blogPage._pageHero?.description}</p>
+        {blogPage._pageHero?.label && (
+          <div className="button">
+            <a href="#">{blogPage._pageHero?.label}</a>
+          </div>
+        )}
       </div>
-      <ul className="blog-post-list">
-        {Array.isArray(items) ? items.map((item, index) => {
-          return (
-            <li key={item.title + index}>{item.title}</li>
-          )
-        }) : (<h3>No posts avaliable</h3>)}
-      </ul>
-    </main>
+      <div className="container">
+
+        <ul className="list">
+          {Array.isArray(blogPosts) ? blogPosts.map((post, index) => {
+            return (
+              <li>
+                <a href={`http://localhost:3000/${post.slug}`} key={post.title + index}>{post.title}</a>
+              </li>
+            )
+          }) : (<h3>No posts avaliable</h3>)}
+        </ul>
+      </div>
+    </div>
   )
 }
 
-
 export async function getStaticProps() {
-  const { data } = await client.query({
+  const { data: { blogPost_All } } = await client.query({
     query: gql`
       query BlogPosts {
         blogPost_All {
@@ -35,7 +43,32 @@ export async function getStaticProps() {
     `
   })
 
+  const { data: { blogPage_All } } = await client.query({
+    variables: {
+      languageFilter: {
+        languageCodename: "International"
+      }
+    },
+    query: gql`
+      query BlogPage($languageFilter: _LanguageFilter) {
+        blogPage_All(languageFilter: $languageFilter) {
+          items {
+            slug
+            _pageHero {
+              title
+              description
+              label
+            }
+          }
+        }
+      }
+    `
+  })
+
+  const [blogPage] = blogPage_All.items
+  const blogPosts = blogPost_All.items;
+
   return {
-    props: { data },
+    props: { blogPage, blogPosts },
   };
 }
