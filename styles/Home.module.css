@@ -1,0 +1,29 @@
+.section-title {
+  font-size: 32px;
+  margin-bottom: 1rem;
+}
+
+.list {
+  padding: 0;
+  border-radius: 20px;
+  background-color: hsl(240, 65%, 97%);
+  overflow: hidden;
+}
+
+.list li a {
+  display: block;
+  padding: 1rem 1.25rem;
+  transition: background-color 200ms ease-in;
+}
+
+.list li a:hover {
+  background-color: hsl(240, 65%, 95%);
+}
+
+.hero-button {
+  margin: 2em 0 0 0;
+}
+
+.hero-title {
+  margin-bottom: 1rem;
+}
