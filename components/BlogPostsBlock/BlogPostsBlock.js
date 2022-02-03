@@ -10,7 +10,7 @@ const BlogPostsBlock = ({ data }) => {
         {Array.isArray(blogPosts) ? blogPosts.map((post, index) => {
           return (
             <li key={post.title + index}>
-              <a href={`http://localhost:3000/${post.slug}`} >{post.title}</a>
+              <a href={`${post.slug}`} >{post.title}</a>
             </li>
           )
         }) : (

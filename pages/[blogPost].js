@@ -16,7 +16,7 @@ const BlogPost = ({ blogPost }) => {
   return (
     <div className="layout">
       <Head>
-        <meta title={blogPost._seoMetadataExampleToIncludeInAnyType?.metaTitle} />
+        <meta title={blogPost._seoMetadata?.metaTitle} />
       </Head>
 
       <div className="container hero">
@@ -49,17 +49,18 @@ export async function getStaticProps({ params }) {
       query: gql`
         query BlogPost_All($where: BlogPost_Where) {
           blogPost_All(where: $where) {
-                items {
+            items {
               title
               summaryOptional
-                  body {
+
+              body {
                 html
               }
-                  _seoMetadataExampleToIncludeInAnyType {
+              _seoMetadata {
                 metaTitle
                 metaDescription
               }
-                  _system_ {
+              _system_ {
                 lastModified
               }
             }
@@ -68,7 +69,9 @@ export async function getStaticProps({ params }) {
       `
     })
 
+
     const [blogPostData] = data.blogPost_All.items;
+
 
     return {
       props: {

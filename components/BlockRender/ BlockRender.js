@@ -29,12 +29,13 @@ const BlockRender = ({ blocks }) => {
 };
 
 function blockSerializer(block) {
-  const [{ component }] = Blocks.filter((item) => item.type === block.__typename)
+  const { __typename: blockType, ...blockData } = block
+  const [{ component }] = Blocks.filter((item) => item.type === blockType)
 
   return {
-    type: block.__typename,
+    type: blockType,
     props: {
-      data: block
+      data: blockData
     },
     component
   }
@@ -43,9 +44,7 @@ function blockSerializer(block) {
 function componentsExists(block) {
   const blockTypes = Blocks.map((item) => item.type)
 
-  console.log({ blockTypes, block })
   if (blockTypes.includes(block.__typename)) {
-    console.log("block type exist")
     return true
   }
   return false;
