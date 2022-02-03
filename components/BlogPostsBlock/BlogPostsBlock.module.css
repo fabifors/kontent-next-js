@@ -1,4 +1,4 @@
-.section-title {
+.title {
   font-size: 32px;
   margin-bottom: 1rem;
 }
@@ -10,6 +10,10 @@
   overflow: hidden;
 }
 
+.list-no-items {
+  padding: 1rem 1.25rem;
+}
+
 .list li a {
   display: block;
   padding: 1rem 1.25rem;
@@ -18,12 +22,4 @@
 
 .list li a:hover {
   background-color: hsl(240, 65%, 95%);
-}
-
-.hero-button {
-  margin: 2em 0 0 0;
-}
-
-.hero-title {
-  margin-bottom: 1rem;
 }

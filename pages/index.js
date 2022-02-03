@@ -1,36 +1,16 @@
 import { gql } from '@apollo/client';
-import Head from 'next/head'
 import client from "../lib/apollo-client";
-import styles from '../styles/Home.module.css';
 
-export default function Home({ blogPage, blogPosts }) {
+// Components
+import HeroBlock from '../components/HeroBlock/HeroBlock';
+import BlockRender from '../components/BlockRender/ BlockRender';
+
+export default function BlogPage({ blogPage, blocks }) {
   return (
     <div className="layout">
-      <Head>
-        <title>Blog Testing Kontent.ai</title>
-      </Head>
-      <div className="container hero">
-        <h1 className={`title ${styles["hero-title"]}`}>{blogPage._pageHero?.title}</h1>
-        <p className="description">{blogPage._pageHero?.description}</p>
-        {blogPage._pageHero?.label && (
-          <div className={`button ${styles["hero-button"]}`}>
-            <a href="#">{blogPage._pageHero?.label}</a>
-          </div>
-        )}
-      </div>
-      <section className="container">
-        <h2 className={styles["section-title"]}>Recent posts</h2>
-        <ul className={styles.list}>
-          {Array.isArray(blogPosts) ? blogPosts.map((post, index) => {
-            return (
-              <li key={post.title + index}>
-                <a href={`http://localhost:3000/${post.slug}`} >{post.title}</a>
-              </li>
-            )
-          }) : (<h3>No posts avaliable</h3>)}
-        </ul>
-      </section>
-    </div >
+      <HeroBlock data={blogPage._pageHero} />
+      <BlockRender blocks={blocks} />
+    </div>
   )
 }
 
@@ -75,6 +55,11 @@ export async function getStaticProps() {
   const blogPosts = blogPost_All.items;
 
   return {
-    props: { blogPage, blogPosts },
+    props: {
+      blogPage,
+      blocks: [
+        { __typename: "BlogPosts", blogPosts },
+      ]
+    },
   };
 }
